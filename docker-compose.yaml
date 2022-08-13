@@ -5,8 +5,9 @@ services:
         image: redis:5-alpine
         ports:
             - '6379:6379'
-        networks:
-            - fake-smtp
 
-networks:
+        volumes:
+            - fake-smtp:/data
+
+volumes:
     fake-smtp:
