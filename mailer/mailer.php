@@ -8,6 +8,7 @@ $mail->setFrom('John <john@example.com>')
     ->addTo('jack@example.com')
     ->setSubject('Order Confirmation')
     ->setBody("Hello, Your order has been accepted.")
+    ->setHtmlBody("<p>Html body here</p>")
     ->addAttachment('email.txt')
 ;
 

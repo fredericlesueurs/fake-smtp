@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { FakeEmailService } from './fake-email.service';
-import {
-  ClientProxyFactory,
-  Transport,
-} from '@nestjs/microservices';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [],
