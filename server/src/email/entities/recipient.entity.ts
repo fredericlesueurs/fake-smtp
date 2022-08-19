@@ -21,18 +21,14 @@ export class Recipient {
   @Column()
   address: string;
 
-  @Column({
-    type: 'enum',
-    enum: RecipientType,
-    default: RecipientType.TO,
-  })
-  type: RecipientType;
+  @Column()
+  type: string;
 
   static create(name: string, address: string, type: RecipientType) {
     const recipient = new Recipient();
     recipient.name = name;
     recipient.address = address;
-    recipient.type = type;
+    recipient.type = type.toString();
 
     return recipient;
   }
