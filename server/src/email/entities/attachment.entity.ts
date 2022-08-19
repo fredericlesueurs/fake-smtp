@@ -16,9 +16,6 @@ export class Attachment {
   contentType: string;
 
   @Column()
-  release?: string | null;
-
-  @Column()
   contentDisposition: string;
 
   @Column()
@@ -33,7 +30,6 @@ export class Attachment {
   static create(
     type: string,
     contentType: string,
-    release: string | null,
     contentDisposition: string,
     filename: string,
     checksum: string,
@@ -42,10 +38,11 @@ export class Attachment {
     const attachment = new Attachment();
     attachment.type = type;
     attachment.contentType = contentType;
-    attachment.release = release;
     attachment.contentDisposition = contentDisposition;
     attachment.filename = filename;
     attachment.checksum = checksum;
     attachment.size = size;
+
+    return attachment;
   }
 }

@@ -14,4 +14,12 @@ export class Sender {
 
   @Column()
   address: string;
+
+  static create(name: string, address: string) {
+    const sender = new Sender();
+    sender.name = name;
+    sender.address = address;
+
+    return sender;
+  }
 }

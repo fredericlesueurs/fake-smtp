@@ -1,6 +1,12 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Email } from './email.entity';
 
+export enum RecipientType {
+  TO = 'TO',
+  BCC = 'BCC',
+  CC = 'CC',
+}
+
 @Entity()
 export class Recipient {
   @PrimaryGeneratedColumn()
@@ -14,4 +20,20 @@ export class Recipient {
 
   @Column()
   address: string;
+
+  @Column({
+    type: 'enum',
+    enum: RecipientType,
+    default: RecipientType.TO,
+  })
+  type: RecipientType;
+
+  static create(name: string, address: string, type: RecipientType) {
+    const recipient = new Recipient();
+    recipient.name = name;
+    recipient.address = address;
+    recipient.type = type;
+
+    return recipient;
+  }
 }
