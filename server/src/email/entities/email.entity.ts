@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Header } from './header.entity';
@@ -15,16 +14,24 @@ export class Email {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Header, (header) => header.email)
+  @OneToMany(() => Header, (header) => header.email, {
+    cascade: ['insert', 'update'],
+  })
   headers: Header[];
 
-  @OneToMany(() => Attachment, (attachment) => attachment.email)
+  @OneToMany(() => Attachment, (attachment) => attachment.email, {
+    cascade: ['insert', 'update'],
+  })
   attachments: Attachment[];
 
-  @OneToMany(() => Recipient, (recipient) => recipient.email)
+  @OneToMany(() => Recipient, (recipient) => recipient.email, {
+    cascade: ['insert', 'update'],
+  })
   recipients: Recipient[];
 
-  @OneToMany(() => Sender, (sender) => sender.email)
+  @OneToMany(() => Sender, (sender) => sender.email, {
+    cascade: ['insert', 'update'],
+  })
   senders: Sender[];
 
   @Column()

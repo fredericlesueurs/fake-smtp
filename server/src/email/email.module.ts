@@ -6,11 +6,13 @@ import { Attachment } from './entities/attachment.entity';
 import { Header } from './entities/header.entity';
 import { Recipient } from './entities/recipient.entity';
 import { Sender } from './entities/sender.entity';
+import { EmailService } from './services/email.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Email, Attachment, Header, Recipient, Sender]),
   ],
   controllers: [EmailController],
+  providers: [EmailService],
 })
 export class EmailModule {}
