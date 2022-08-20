@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
-import { ParsedMail } from 'mailparser';
+import { AddressObject, ParsedMail } from 'mailparser';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Email } from '../entities/email.entity';
 import { Repository } from 'typeorm';
@@ -32,10 +32,23 @@ export class EmailController {
       );
     });
 
-    if (parsedMail.to && Array.isArray(parsedMail.to)) {
-      const toRecipients = parsedMail.to
+    const recipientsTo = this.extractRecipients(parsedMail.to);
+
+    const from = parsedMail.from.value.pop();
+    const sender = Sender.create(from.name, from.address);
+
+    const email = new Email();
+
+    // this.emailRepository.save();
+  }
+
+  private extractRecipients(
+    parsedMailRecipients: AddressObject | AddressObject[],
+  ): Recipient[] {
+    if (Array.isArray(parsedMailRecipients)) {
+      return parsedMailRecipients
         .map((recipient) => {
-          recipient.value.map((recipient) => {
+          return recipient.value.map((recipient) => {
             return Recipient.create(
               recipient.name,
               recipient.address,
@@ -46,13 +59,12 @@ export class EmailController {
         .flat();
     }
 
-    const toRecipients = parsedMail.to;
-
-    const from = parsedMail.from.value.pop();
-    const sender = Sender.create(from.name, from.address);
-
-    const email = new Email();
-
-    // this.emailRepository.save();
+    return parsedMailRecipients.value.map((recipient) => {
+      return Recipient.create(
+        recipient.name,
+        recipient.address,
+        RecipientType.TO,
+      );
+    });
   }
 }
