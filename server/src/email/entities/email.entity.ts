@@ -24,8 +24,8 @@ export class Email {
   @OneToMany(() => Recipient, (recipient) => recipient.email)
   recipients: Recipient[];
 
-  @OneToOne(() => Sender, (sender) => sender.email)
-  sender: Sender;
+  @OneToMany(() => Sender, (sender) => sender.email)
+  senders: Sender[];
 
   @Column()
   text: string;

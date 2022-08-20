@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Email } from './email.entity';
 
 @Entity()
@@ -6,7 +6,7 @@ export class Sender {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Email, (email) => email.sender)
+  @ManyToOne(() => Email, (email) => email.senders)
   email: Email;
 
   @Column()

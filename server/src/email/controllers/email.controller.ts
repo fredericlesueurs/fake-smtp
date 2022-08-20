@@ -33,11 +33,19 @@ export class EmailController {
     });
 
     const recipientsTo = this.extractRecipients(parsedMail.to);
+    const recipientsCc = this.extractRecipients(parsedMail.cc);
+    const recipientsBcc = this.extractRecipients(parsedMail.bcc);
 
-    const from = parsedMail.from.value.pop();
-    const sender = Sender.create(from.name, from.address);
+    const senders = this.extractSenders(parsedMail.from);
 
     const email = new Email();
+    email.senders = senders;
+    email.attachments = attachments;
+    email.recipients = [...recipientsTo, ...recipientsBcc, ...recipientsCc];
+    email.headers = headers;
+    email.date = parsedMail.date;
+    email.html = parsedMail.html ? parsedMail.html : null;
+
 
     // this.emailRepository.save();
   }
@@ -65,6 +73,12 @@ export class EmailController {
         recipient.address,
         RecipientType.TO,
       );
+    });
+  }
+
+  private extractSenders(parsedMailSender: AddressObject): Sender[] {
+    return parsedMailSender.value.map((sender) => {
+      return Sender.create(sender.name, sender.address);
     });
   }
 }
