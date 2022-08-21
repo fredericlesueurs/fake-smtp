@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipient, RecipientType } from '../entities/recipient.entity';
 import { Sender } from '../entities/sender.entity';
+import { CustomParserMail } from '../models/email.model';
 
 @Injectable()
 export class EmailService {
@@ -14,7 +15,7 @@ export class EmailService {
     @InjectRepository(Email) private emailRepository: Repository<Email>,
   ) {}
 
-  async createEmail(parsedMail: ParsedMail): Promise<void> {
+  async createEmail(parsedMail: CustomParserMail): Promise<void> {
     let recipientsCc = [];
     let recipientsBcc = [];
 
@@ -22,8 +23,7 @@ export class EmailService {
       return Header.create(headerLine.key, headerLine.line);
     });
 
-    const attachments = parsedMail.attachments.map((attachment): Attachment => {
-      console.log(attachment.content.toString());
+    const attachments = parsedMail.customAttachment.map((attachment): Attachment => {
       return Attachment.create(
         attachment.type,
         attachment.contentType,
@@ -31,7 +31,7 @@ export class EmailService {
         attachment.filename,
         attachment.checksum,
         attachment.size,
-        attachment.content.toString(),
+        attachment.base64Content,
       );
     });
 

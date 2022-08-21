@@ -5,6 +5,7 @@ import { SMTPServer } from 'smtp-server';
 import { simpleParser } from 'mailparser';
 import { promisify } from 'bluebird';
 import { FakeEmailService } from './fake-email.service';
+import { CustomParserMail } from './email.model';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -18,7 +19,7 @@ async function bootstrap() {
         const simpleParserAsync = promisify(simpleParser);
         const parsedEmail = await simpleParserAsync(stream);
 
-        fakeEmailService.publishEmail(parsedEmail);
+        fakeEmailService.publishEmail(<CustomParserMail>parsedEmail);
       })();
 
       stream.on('end', callback);

@@ -1,14 +1,20 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { ParsedMail } from 'mailparser';
 import { EmailService } from '../services/email.service';
+import { CustomParserMail } from '../models/email.model';
 
 @Controller()
 export class EmailController {
   constructor(private emailService: EmailService) {}
 
+  // @Get('emails')
+  // async allMails() {
+  //   return await this.emailService.getAllMails();
+  // }
+
   @EventPattern('emails')
   async handleNewEmail(parsedMail: ParsedMail) {
-    await this.emailService.createEmail(parsedMail);
+    await this.emailService.createEmail(<CustomParserMail>parsedMail);
   }
 }

@@ -1,5 +1,5 @@
 import {
-  Column,
+  Column, CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -37,7 +37,7 @@ export class Email {
   @Column()
   text: string;
 
-  @Column()
+  @Column({ nullable: true })
   html?: string | null;
 
   @Column()
@@ -48,4 +48,10 @@ export class Email {
 
   @Column()
   messageId: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column({ nullable: true })
+  readAt: Date | null;
 }
