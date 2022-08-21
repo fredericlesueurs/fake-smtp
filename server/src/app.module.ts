@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'sqlite',
       database: 'smtp.db',
       autoLoadEntities: true,
+      synchronize: true,
     }),
   ],
   controllers: [],

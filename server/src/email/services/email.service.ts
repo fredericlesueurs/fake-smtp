@@ -23,6 +23,7 @@ export class EmailService {
     });
 
     const attachments = parsedMail.attachments.map((attachment): Attachment => {
+      console.log(attachment.content.toString());
       return Attachment.create(
         attachment.type,
         attachment.contentType,
@@ -30,6 +31,7 @@ export class EmailService {
         attachment.filename,
         attachment.checksum,
         attachment.size,
+        attachment.content.toString(),
       );
     });
 
@@ -55,8 +57,6 @@ export class EmailService {
     email.text = parsedMail.text;
     email.messageId = parsedMail.messageId;
     email.subject = parsedMail.subject;
-
-    console.log(email);
 
     await this.emailRepository.save(email);
   }

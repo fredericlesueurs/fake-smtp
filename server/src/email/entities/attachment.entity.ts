@@ -27,6 +27,9 @@ export class Attachment {
   @Column('int')
   size: number;
 
+  @Column('text')
+  content: string;
+
   static create(
     type: string,
     contentType: string,
@@ -34,6 +37,7 @@ export class Attachment {
     filename: string,
     checksum: string,
     size: number,
+    content: string,
   ) {
     const attachment = new Attachment();
     attachment.type = type;
@@ -42,6 +46,7 @@ export class Attachment {
     attachment.filename = filename;
     attachment.checksum = checksum;
     attachment.size = size;
+    attachment.content = content;
 
     return attachment;
   }
