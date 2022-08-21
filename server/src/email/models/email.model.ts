@@ -1,9 +1,4 @@
-import { Attachment, ParsedMail } from 'mailparser';
+import { ObjectType } from '@nestjs/graphql';
 
-export interface CustomAttachment extends Attachment {
-  base64Content: string;
-}
-
-export interface CustomParserMail extends ParsedMail {
-  customAttachment: CustomAttachment[];
-}
+@ObjectType()
+export class Email {}

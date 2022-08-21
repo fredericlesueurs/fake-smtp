@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 import { ParsedMail } from 'mailparser';
 import { EmailService } from '../services/email.service';
-import { CustomParserMail } from '../models/email.model';
+import { CustomParserMail } from '../models/parsed-email.model';
 
 @Controller()
 export class EmailController {
