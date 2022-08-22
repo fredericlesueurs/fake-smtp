@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddressObject, ParsedMail } from 'mailparser';
+import { AddressObject } from 'mailparser';
 import { Header } from '../entities/header.entity';
 import { Attachment } from '../entities/attachment.entity';
 import { Email } from '../entities/email.entity';
@@ -8,11 +8,13 @@ import { Repository } from 'typeorm';
 import { Recipient, RecipientType } from '../entities/recipient.entity';
 import { Sender } from '../entities/sender.entity';
 import { CustomParserMail } from '../models/parsed-email.model';
+import { EmailMapper } from '../mapper/email.mapper';
 
 @Injectable()
 export class EmailService {
   constructor(
     @InjectRepository(Email) private emailRepository: Repository<Email>,
+    private emailMapper: EmailMapper,
   ) {}
 
   async createEmail(parsedMail: CustomParserMail): Promise<void> {
@@ -65,6 +67,16 @@ export class EmailService {
 
   async countAll(): Promise<number> {
     return await this.emailRepository.count();
+  }
+
+  async all(limit?: number, offset?: number): Promise<Email[]> {
+    const emails = await this.emailRepository
+      .createQueryBuilder('e')
+      .limit(limit)
+      .offset(offset)
+      .getMany();
+
+    return <Email[]>this.emailMapper.entityToGraphQl(emails);
   }
 
   private extractRecipients(
