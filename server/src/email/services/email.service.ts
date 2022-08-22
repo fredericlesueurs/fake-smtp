@@ -63,6 +63,10 @@ export class EmailService {
     await this.emailRepository.save(email);
   }
 
+  async countAll(): Promise<number> {
+    return await this.emailRepository.count();
+  }
+
   private extractRecipients(
     parsedMailRecipients: AddressObject | AddressObject[],
   ): Recipient[] {
