@@ -1,6 +1,6 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { PaginationArgs } from '../graphql/args/pagination.args';
-import { Email } from '../models/email.model';
+import { Email } from '../graphql/types/email.type';
 import { EmailService } from '../services/email.service';
 
 @Resolver()

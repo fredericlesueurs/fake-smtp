@@ -3,6 +3,7 @@ import { AddressObject } from 'mailparser';
 import { Header } from '../entities/header.entity';
 import { Attachment } from '../entities/attachment.entity';
 import { Email } from '../entities/email.entity';
+import { Email as GraphQlEmail } from '../graphql/types/email.type';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipient, RecipientType } from '../entities/recipient.entity';
@@ -69,14 +70,18 @@ export class EmailService {
     return await this.emailRepository.count();
   }
 
-  async all(limit?: number, offset?: number): Promise<Email[]> {
+  async all(limit?: number, offset?: number): Promise<GraphQlEmail[]> {
     const emails = await this.emailRepository
       .createQueryBuilder('e')
+      .leftJoinAndSelect('e.headers', 'h')
+      .leftJoinAndSelect('e.attachments', 'a')
+      .leftJoinAndSelect('e.recipients', 'r')
+      .leftJoinAndSelect('e.senders', 's')
       .limit(limit)
       .offset(offset)
       .getMany();
 
-    return <Email[]>this.emailMapper.entityToGraphQl(emails);
+    return <GraphQlEmail[]>this.emailMapper.entityToGraphQl(emails);
   }
 
   private extractRecipients(
