@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AddressObject } from 'mailparser';
 import { Header } from '../entities/header.entity';
 import { Attachment } from '../entities/attachment.entity';
 import { Email } from '../entities/email.entity';
 import { Email as GraphQlEmail } from '../graphql/types/email.type';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Recipient, RecipientType } from '../entities/recipient.entity';
 import { Sender } from '../entities/sender.entity';
 import { CustomParserMail } from '../models/parsed-email.model';
@@ -16,6 +16,7 @@ export class EmailService {
   constructor(
     @InjectRepository(Email) private emailRepository: Repository<Email>,
     private emailMapper: EmailMapper,
+    private manager: EntityManager,
   ) {}
 
   async createEmail(parsedMail: CustomParserMail): Promise<void> {
@@ -77,11 +78,51 @@ export class EmailService {
       .leftJoinAndSelect('e.attachments', 'a')
       .leftJoinAndSelect('e.recipients', 'r')
       .leftJoinAndSelect('e.senders', 's')
-      .limit(limit)
-      .offset(offset)
+      .orderBy('e.date', 'DESC')
+      .take(limit)
+      .skip(offset)
       .getMany();
 
     return <GraphQlEmail[]>this.emailMapper.entityToGraphQl(emails);
+  }
+
+  async getById(id: number): Promise<GraphQlEmail> {
+    const email = await this.emailRepository.findOne({
+      where: { id: id },
+      relations: {
+        headers: true,
+        attachments: true,
+        senders: true,
+        recipients: true,
+      },
+    });
+
+    if (null === email) {
+      throw new HttpException('Email not found', HttpStatus.NOT_FOUND);
+    }
+
+    email.readAt = new Date();
+    this.emailRepository.save(email);
+
+    return <GraphQlEmail>this.emailMapper.entityToGraphQl(email);
+  }
+
+  async delete(id: number): Promise<void> {
+    const email = await this.emailRepository.findOne({
+      where: { id: id },
+      relations: {
+        headers: true,
+        attachments: true,
+        senders: true,
+        recipients: true,
+      },
+    });
+
+    if (null === email) {
+      throw new HttpException('Email not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.manager.remove(email);
   }
 
   private extractRecipients(

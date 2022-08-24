@@ -3,6 +3,9 @@ import { RecipientType } from '../enums/recipient.enum';
 
 @ObjectType()
 export class Email {
+  @Field(() => Int)
+  id: number;
+
   @Field(() => [Header])
   headers: Header[];
 

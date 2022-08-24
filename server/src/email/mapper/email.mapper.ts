@@ -15,6 +15,7 @@ export class EmailMapper {
   ): GraphQlEmail[] | GraphQlEmail {
     if (!Array.isArray(emails)) {
       const emailGraphQl = new GraphQlEmail();
+      emailGraphQl.id = emails.id;
       emailGraphQl.createdAt = emails.createdAt;
       emailGraphQl.date = emails.date;
       emailGraphQl.html = emails.html;
@@ -75,6 +76,7 @@ export class EmailMapper {
 
     return emails.map((email): GraphQlEmail => {
       const emailGraphQl = new GraphQlEmail();
+      emailGraphQl.id = email.id;
       emailGraphQl.createdAt = email.createdAt;
       emailGraphQl.date = email.date;
       emailGraphQl.html = email.html;

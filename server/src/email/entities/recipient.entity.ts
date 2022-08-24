@@ -12,7 +12,7 @@ export class Recipient {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Email, (email) => email.recipients)
+  @ManyToOne(() => Email, (email) => email.recipients, { onDelete: 'CASCADE' })
   email: Email;
 
   @Column()

@@ -7,7 +7,7 @@ import { Header } from './entities/header.entity';
 import { Recipient } from './entities/recipient.entity';
 import { Sender } from './entities/sender.entity';
 import { EmailService } from './services/email.service';
-import { EmailResolver } from './resolvers/email.resolver';
+import { EmailResolver } from './graphql/resolvers/email.resolver';
 import { EmailMapper } from './mapper/email.mapper';
 
 @Module({

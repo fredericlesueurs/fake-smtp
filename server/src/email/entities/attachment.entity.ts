@@ -6,7 +6,7 @@ export class Attachment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Email, (email) => email.attachments)
+  @ManyToOne(() => Email, (email) => email.attachments, { onDelete: 'CASCADE' })
   email: Email;
 
   @Column()

@@ -6,7 +6,7 @@ export class Sender {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Email, (email) => email.senders)
+  @ManyToOne(() => Email, (email) => email.senders, { onDelete: 'CASCADE' })
   email: Email;
 
   @Column()

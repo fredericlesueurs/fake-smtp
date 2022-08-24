@@ -16,22 +16,22 @@ export class Email {
   id: number;
 
   @OneToMany(() => Header, (header) => header.email, {
-    cascade: ['insert', 'update'],
+    cascade: ['insert', 'update', 'remove'],
   })
   headers: Header[];
 
   @OneToMany(() => Attachment, (attachment) => attachment.email, {
-    cascade: ['insert', 'update'],
+    cascade: ['insert', 'update', 'remove'],
   })
   attachments: Attachment[];
 
   @OneToMany(() => Recipient, (recipient) => recipient.email, {
-    cascade: ['insert', 'update'],
+    cascade: ['insert', 'update', 'remove'],
   })
   recipients: Recipient[];
 
   @OneToMany(() => Sender, (sender) => sender.email, {
-    cascade: ['insert', 'update'],
+    cascade: ['insert', 'update', 'remove'],
   })
   senders: Sender[];
 
