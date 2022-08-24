@@ -21,13 +21,4 @@ export class EmailResolver {
   async email(@Args('id', { type: () => Int }) id: number): Promise<Email> {
     return await this.emailService.getById(id);
   }
-
-  @Query(() => Boolean)
-  async deleteEmail(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<boolean> {
-    await this.emailService.delete(id);
-
-    return true;
-  }
 }

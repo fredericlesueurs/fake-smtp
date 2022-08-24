@@ -9,12 +9,13 @@ import { Sender } from './entities/sender.entity';
 import { EmailService } from './services/email.service';
 import { EmailResolver } from './graphql/resolvers/email.resolver';
 import { EmailMapper } from './mapper/email.mapper';
+import { EmailMutation } from './graphql/mutations/email.mutation';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Email, Attachment, Header, Recipient, Sender]),
   ],
   controllers: [EmailController],
-  providers: [EmailResolver, EmailService, EmailMapper],
+  providers: [EmailResolver, EmailMutation, EmailService, EmailMapper],
 })
 export class EmailModule {}

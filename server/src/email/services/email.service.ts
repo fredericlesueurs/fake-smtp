@@ -125,6 +125,14 @@ export class EmailService {
     await this.manager.remove(email);
   }
 
+  async deleteAll(): Promise<void> {
+    const allEmails = await this.emailRepository
+      .createQueryBuilder('e')
+      .getMany();
+
+    await this.manager.remove(allEmails);
+  }
+
   private extractRecipients(
     parsedMailRecipients: AddressObject | AddressObject[],
   ): Recipient[] {
