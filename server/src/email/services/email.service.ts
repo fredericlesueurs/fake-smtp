@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { AddressObject } from 'mailparser';
 import { Header } from '../entities/header.entity';
 import { Attachment } from '../entities/attachment.entity';
@@ -10,6 +10,7 @@ import { Recipient, RecipientType } from '../entities/recipient.entity';
 import { Sender } from '../entities/sender.entity';
 import { CustomParserMail } from '../models/parsed-email.model';
 import { EmailMapper } from '../mapper/email.mapper';
+import { PubSub } from 'graphql-subscriptions';
 
 @Injectable()
 export class EmailService {
@@ -17,6 +18,7 @@ export class EmailService {
     @InjectRepository(Email) private emailRepository: Repository<Email>,
     private emailMapper: EmailMapper,
     private manager: EntityManager,
+    @Inject('PUB_SUB') private pubSub: PubSub,
   ) {}
 
   async createEmail(parsedMail: CustomParserMail): Promise<void> {
@@ -65,6 +67,8 @@ export class EmailService {
     email.subject = parsedMail.subject;
 
     await this.emailRepository.save(email);
+
+    this.pubSub.publish('countEmails', { countEmail: await this.countAll() });
   }
 
   async countAll(): Promise<number> {
